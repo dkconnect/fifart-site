@@ -11,25 +11,34 @@
 html{scroll-behavior:smooth} body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
 #loader{position:fixed;inset:0;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:4rem;z-index:9999}
 nav{position:fixed;top:0;left:0;right:0;padding:18px 30px;display:flex;justify-content:space-between;backdrop-filter:blur(12px);z-index:100}
-.hero{min-height:100vh;padding:90px 5vw;display:flex;flex-direction:column;justify-content:center}
-.posterHero{height:65vh;border-radius:30px;background:linear-gradient(135deg,#ddd,#bbb);display:flex;align-items:center;justify-content:center}
+.hero{min-height:100vh;padding:120px 5vw 90px 5vw;display:flex;flex-direction:column;justify-content:center}
+
+/* Fixed Hero dimensions to match a classic portrait poster shape */
+.posterHero{width:min(100%,480px);aspect-ratio:3/4;margin:0 auto 40px auto;border-radius:30px;background:linear-gradient(135deg,#ddd,#bbb);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.15)}
 h1{font-size:clamp(4rem,12vw,12rem);line-height:.85}
 .desc{max-width:800px;font-size:1.4rem;margin-top:30px}
 .controls{display:flex;gap:10px}
-select,button,input{padding:10px 14px;border-radius:999px;border:1px solid #ccc}
-.gallery{padding:100px 5vw;column-count:3;column-gap:24px}
-.card{break-inside:avoid;margin-bottom:24px;background:var(--card);border-radius:22px;overflow:hidden;cursor:pointer;transform:translateY(40px);opacity:0;transition:.8s}
+select,button,input{padding:10px 14px;border-radius:999px;border:1px solid #ccc;background:var(--card);color:var(--text)}
+
+/* Responsive Grid setup optimized specifically for tall portrait images */
+.gallery{padding:100px 5vw;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:40px}
+.card{background:var(--card);border-radius:22px;overflow:hidden;cursor:pointer;transform:translateY(40px);opacity:0;transition:.8s;box-shadow:0 10px 20px rgba(0,0,0,0.05)}
 .card.show{transform:none;opacity:1}
-.img{height:420px;background:linear-gradient(135deg,#cfcfcf,#aaa);display:flex;align-items:center;justify-content:center}
+
+/* Converted Card placeholder height into portrait poster aspect ratio */
+.img{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,#cfcfcf,#aaa);display:flex;align-items:center;justify-content:center;object-fit:cover}
 .meta{padding:18px}
-.fullbleed{height:80vh;margin:80px 0;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;font-size:8vw;font-weight:900}
+.fullbleed{height:50vh;margin:80px 0;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;font-size:8vw;font-weight:900}
 footer{padding:120px 5vw}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);align-items:center;justify-content:center;z-index:999}
+
+/* Reconfigured modal to properly present portrait dimensions without clipping */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);align-items:center;justify-content:center;z-index:999;padding:20px}
 .modal.active{display:flex}
-.modalBox{background:white;color:black;width:min(1000px,90vw);border-radius:24px;overflow:hidden}
-.modalImg{height:500px;background:#ccc;display:flex;align-items:center;justify-content:center}
+.modalBox{background:var(--card);color:var(--text);width:min(450px,100%);border-radius:24px;overflow:hidden;display:flex;flex-direction:column}
+.modalImg{width:100%;aspect-ratio:3/4;background:#ccc;display:flex;align-items:center;justify-content:center;object-fit:cover}
+
 .noise:before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:radial-gradient(#000 1px,transparent 1px);background-size:4px 4px}
-@media(max-width:900px){.gallery{column-count:1}.fullbleed{font-size:16vw}}
+@media(max-width:900px){.gallery{grid-template-columns:1fr}.fullbleed{font-size:16vw}}
 </style>
 </head>
 <body class="noise">
@@ -51,7 +60,7 @@ footer{padding:120px 5vw}
 </nav>
 
 <section class="hero">
-<div class="posterHero"><img src="https://static.vecteezy.com/system/resources/thumbnails/075/926/648/small_2x/fifa-world-cup-2026-logo-is-shown-on-a-dark-background-free-video.jpg" alt="Hero Poster" style="width:100%;height:100%;object-fit:cover;border-radius:30px;"></div>
+<div class="posterHero"><img src="https://static.vecteezy.com/system/resources/thumbnails/075/926/648/small_2x/fifa-world-cup-2026-logo-is-shown-on-a-dark-background-free-video.jpg" alt="Hero Poster" style="width:100%;height:100%;object-fit:cover;"></div>
 <h1>FIFART</h1>
 <div class="desc">
 Combining generative art, football, graphic design and my love.<br><br>
