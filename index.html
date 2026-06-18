@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FIFART</title>
+<style>
+:root{--bg:#f5f1ea;--text:#111;--accent:#ff5b00;--card:#fff}
+[data-theme=dark]{--bg:#0d0d0d;--text:#fff;--card:#171717}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth} body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+#loader{position:fixed;inset:0;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:4rem;z-index:9999}
+nav{position:fixed;top:0;left:0;right:0;padding:18px 30px;display:flex;justify-content:space-between;backdrop-filter:blur(12px);z-index:100}
+.hero{min-height:100vh;padding:90px 5vw;display:flex;flex-direction:column;justify-content:center}
+.posterHero{height:65vh;border-radius:30px;background:linear-gradient(135deg,#ddd,#bbb);display:flex;align-items:center;justify-content:center}
+h1{font-size:clamp(4rem,12vw,12rem);line-height:.85}
+.desc{max-width:800px;font-size:1.4rem;margin-top:30px}
+.controls{display:flex;gap:10px}
+select,button,input{padding:10px 14px;border-radius:999px;border:1px solid #ccc}
+.gallery{padding:100px 5vw;column-count:3;column-gap:24px}
+.card{break-inside:avoid;margin-bottom:24px;background:var(--card);border-radius:22px;overflow:hidden;cursor:pointer;transform:translateY(40px);opacity:0;transition:.8s}
+.card.show{transform:none;opacity:1}
+.img{height:420px;background:linear-gradient(135deg,#cfcfcf,#aaa);display:flex;align-items:center;justify-content:center}
+.meta{padding:18px}
+.fullbleed{height:80vh;margin:80px 0;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;font-size:8vw;font-weight:900}
+footer{padding:120px 5vw}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);align-items:center;justify-content:center;z-index:999}
+.modal.active{display:flex}
+.modalBox{background:white;color:black;width:min(1000px,90vw);border-radius:24px;overflow:hidden}
+.modalImg{height:500px;background:#ccc;display:flex;align-items:center;justify-content:center}
+.noise:before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:radial-gradient(#000 1px,transparent 1px);background-size:4px 4px}
+@media(max-width:900px){.gallery{column-count:1}.fullbleed{font-size:16vw}}
+</style>
+</head>
+<body class="noise">
+<div id="loader">FIFART</div>
+
+<nav>
+<div><b>FIFART</b></div>
+<div class="controls">
+<input id="search" placeholder="Search match">
+<select id="filter">
+<option value="all">All Matches</option>
+<option>Mexico vs South Africa</option>
+<option>Argentina vs Algeria</option>
+<option>France vs Senegal</option>
+<option>Portugal vs DR Congo</option>
+</select>
+<button id="theme">Theme</button>
+</div>
+</nav>
+
+<section class="hero">
+<div class="posterHero"><img src="https://static.vecteezy.com/system/resources/thumbnails/075/926/648/small_2x/fifa-world-cup-2026-logo-is-shown-on-a-dark-background-free-video.jpg" alt="Hero Poster" style="width:100%;height:100%;object-fit:cover;border-radius:30px;"></div>
+<h1>FIFART</h1>
+<div class="desc">
+Combining generative art, football, graphic design and my love.<br><br>
+Created by Dibyanshu | Lucifer - 2026.<br><br>
+Inspired from Gencup by Julia Poloni, Rafa Poloni and Zeh Fernandes.
+</div>
+</section>
+
+<div class="fullbleed">WORLD CUP 2026</div>
+
+<section class="gallery" id="gallery"></section>
+
+<footer>
+<h1>FIFART</h1>
+<p style="margin-top:20px;font-size:1.2rem">Created with love ❤️ and for Messi's 2026 World Cup.</p>
+<p style="margin-top:10px">Created by Dibyanshu | Lucifer.</p>
+</footer>
+
+<div class="modal" id="modal">
+<div class="modalBox">
+<div class="modalImg">POSTER IMAGE</div>
+<div style="padding:24px">
+<h2 id="title"></h2>
+</div>
+</div>
+</div>
+
+<script>
+const matches=[
+"Mexico vs South Africa","South Korea vs Czechia","Argentina vs Algeria",
+"France vs Senegal","Portugal vs DR Congo","England vs Croatia",
+"Brazil vs Japan","Spain vs Morocco","Germany vs USA","Netherlands vs Ghana"
+];
+
+const gallery=document.getElementById('gallery');
+matches.forEach((m,i)=>{
+const d=document.createElement('div');
+d.className='card';
+d.dataset.name=m.toLowerCase();
+d.innerHTML=`<div class="img">POSTER ${String(i+1).padStart(3,'0')}</div>
+<div class="meta"><small>POSTER ${i+1}</small><h3>${m}</h3></div>`;
+gallery.appendChild(d);
+});
+
+setTimeout(()=>document.getElementById('loader').remove(),1200);
+
+const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('show')));
+document.querySelectorAll('.card').forEach(c=>obs.observe(c));
+
+document.getElementById('theme').onclick=()=>{
+document.documentElement.dataset.theme=
+document.documentElement.dataset.theme==='dark'?'':'dark';
+};
+
+const search=document.getElementById('search');
+search.oninput=filterCards;
+document.getElementById('filter').onchange=filterCards;
+
+function filterCards(){
+const q=search.value.toLowerCase();
+const f=document.getElementById('filter').value.toLowerCase();
+document.querySelectorAll('.card').forEach(c=>{
+const okSearch=c.dataset.name.includes(q);
+const okFilter=f==='all'||c.dataset.name===f;
+c.style.display=(okSearch&&okFilter)?'block':'none';
+});
+}
+
+const modal=document.getElementById('modal');
+document.querySelectorAll('.card').forEach(c=>c.onclick=()=>{
+document.getElementById('title').textContent=c.querySelector('h3').textContent;
+modal.classList.add('active');
+});
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove('active')};
+
+document.addEventListener('keydown',e=>{
+if(e.key==='Escape')modal.classList.remove('active');
+});
+
+window.addEventListener('scroll',()=>{
+document.querySelector('.posterHero').style.transform=`translateY(${window.scrollY*0.08}px)`;
+});
+</script>
+</body>
+</html>
